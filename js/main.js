@@ -35,3 +35,22 @@ document.querySelectorAll('a[href^="#"]').forEach((anchor) => {
     }
   });
 });
+
+
+/* ══════════════════════════════════════
+   PHONE NUMBER DISPLAY
+   ══════════════════════════════════════
+   Shows phone number and copies to clipboard on click.
+*/
+
+function copyPhone(e) {
+  e.preventDefault();
+  var btn = document.getElementById('phoneBtn');
+  if (btn.dataset.showing === 'true') {
+    btn.textContent = '📞 Phone';
+    btn.dataset.showing = 'false';
+  } else {
+    btn.textContent = '📞 315-956-2749';
+    btn.dataset.showing = 'true';
+  }
+}
