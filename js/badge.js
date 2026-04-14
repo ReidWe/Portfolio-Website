@@ -1,60 +1,27 @@
 /* ══════════════════════════════════════
-   SCROLL REVEAL
-   ══════════════════════════════════════
-   Fades in sections as they enter the viewport.
-*/
-
-const observer = new IntersectionObserver(
-  (entries) => {
-    entries.forEach((entry) => {
-      if (entry.isIntersecting) {
-        entry.target.classList.add('visible');
-      }
-    });
-  },
-  { threshold: 0.1 }
-);
-
-document.querySelectorAll('.reveal').forEach((el) => {
-  observer.observe(el);
-});
-
-
-/* ══════════════════════════════════════
-   SMOOTH SCROLL
-   ══════════════════════════════════════
-   Handles anchor links for smooth navigation.
-*/
-
-document.querySelectorAll('a[href^="#"]').forEach((anchor) => {
-  anchor.addEventListener('click', (e) => {
-    e.preventDefault();
-    const target = document.querySelector(anchor.getAttribute('href'));
-    if (target) {
-      target.scrollIntoView({ behavior: 'smooth' });
-    }
-  });
-});
-
-
-/* ══════════════════════════════════════
    BADGE — LANYARD PHYSICS SIMULATION
    ══════════════════════════════════════
    Interactive draggable Syracuse badge with
    verlet-integration rope physics.
+
+   Self-contained: only requires a <canvas id="badgeCanvas">
+   inside a wrapper element. Fails silently if canvas is missing.
 */
 
 (function () {
   const badgeCanvas = document.getElementById('badgeCanvas');
   if (!badgeCanvas) return;
+
   const bCtx2 = badgeCanvas.getContext('2d');
   const wrap = badgeCanvas.parentElement;
   const dpr = window.devicePixelRatio || 1;
   let bW, bH;
 
+  // ── Canvas sizing ──────────────────────────
+
   function badgeResize() {
-    const cssW = wrap.clientWidth + 500;
-    const cssH = wrap.clientHeight + 300;
+    const cssW = 420;
+    const cssH = wrap.clientHeight + 160;
     badgeCanvas.width = cssW * dpr;
     badgeCanvas.height = cssH * dpr;
     badgeCanvas.style.width = cssW + 'px';
@@ -63,25 +30,28 @@ document.querySelectorAll('a[href^="#"]').forEach((anchor) => {
     bW = cssW;
     bH = cssH;
     badgeAnchor.x = bW / 2;
-    badgeAnchor.y = 140;
+    badgeAnchor.y = 100;
   }
 
-  // Physics constants
+  // ── Physics constants ──────────────────────
+
   const BGRAVITY = 0.7;
   const BDAMPING = 0.975;
   const BROPE_SEGMENTS = 12;
   const BROPE_LENGTH = 18;
-  const badgeAnchor = { x: 0, y: 140 };
+  const badgeAnchor = { x: 0, y: 100 };
   const bPoints = [];
 
   for (let i = 0; i <= BROPE_SEGMENTS; i++) {
     bPoints.push({
       x: 0,
-      y: 140 + i * BROPE_LENGTH,
+      y: 100 + i * BROPE_LENGTH,
       oldX: 0,
-      oldY: 140 + i * BROPE_LENGTH,
+      oldY: 100 + i * BROPE_LENGTH,
     });
   }
+
+  // ── Badge dimensions & state ───────────────
 
   const BBADGE_W = 180;
   const BBADGE_H = 250;
@@ -90,15 +60,19 @@ document.querySelectorAll('a[href^="#"]').forEach((anchor) => {
   let bMouseX = -1000;
   let bMouseY = -1000;
   let bSmoothAngle = 0;
+  let bSmoothTwist = 0;
 
-  // Off-screen texture canvas for the badge face
+  // ── Off-screen texture canvas ──────────────
+
   const texCanvas = document.createElement('canvas');
   const tCtx = texCanvas.getContext('2d');
   const texScale = Math.max(2, dpr);
   texCanvas.width = BBADGE_W * texScale;
   texCanvas.height = BBADGE_H * texScale;
 
-  // Optional photo loading
+  // ── Optional photo loading ─────────────────
+  // Path is relative to index.html (root), not this JS file
+
   const badgePhoto = new Image();
   const photoExts = ['png', 'jpg', 'jpeg', 'webp'];
   let photoExtIdx = 0;
@@ -118,7 +92,8 @@ document.querySelectorAll('a[href^="#"]').forEach((anchor) => {
   };
   tryNextPhoto();
 
-  // Draw the badge texture
+  // ── Draw badge texture ─────────────────────
+
   function drawBadgeTex() {
     const s = texScale;
     const w = BBADGE_W * s;
@@ -241,10 +216,11 @@ document.querySelectorAll('a[href^="#"]').forEach((anchor) => {
     tCtx.restore();
   }
 
+  // ── Initialize ─────────────────────────────
+
   drawBadgeTex();
   badgeResize();
 
-  // Initialize rope points at anchor
   for (let i = 0; i <= BROPE_SEGMENTS; i++) {
     bPoints[i].x = badgeAnchor.x;
     bPoints[i].oldX = badgeAnchor.x;
@@ -254,7 +230,8 @@ document.querySelectorAll('a[href^="#"]').forEach((anchor) => {
 
   window.addEventListener('resize', badgeResize);
 
-  // Physics simulation
+  // ── Physics simulation ─────────────────────
+
   function bSimulate() {
     for (let i = 1; i < bPoints.length; i++) {
       const p = bPoints[i];
@@ -271,6 +248,8 @@ document.querySelectorAll('a[href^="#"]').forEach((anchor) => {
       p.x += vx;
       p.y += vy + BGRAVITY;
       if (i >= bPoints.length - 3) p.y += 0.3;
+
+      // Mouse repulsion
       if (!bDragging) {
         const dmx = p.x - bMouseX;
         const dmy = p.y - bMouseY;
@@ -283,9 +262,11 @@ document.querySelectorAll('a[href^="#"]').forEach((anchor) => {
       }
     }
 
+    // Pin anchor
     bPoints[0].x = badgeAnchor.x;
     bPoints[0].y = badgeAnchor.y;
 
+    // Apply drag
     if (bDragging && bDragPoint !== null) {
       const idx = bDragPoint.ropeIndex !== undefined ? bDragPoint.ropeIndex : bPoints.length - 1;
       bPoints[idx].x = bDragPoint.x;
@@ -317,6 +298,8 @@ document.querySelectorAll('a[href^="#"]').forEach((anchor) => {
           b.y += oy;
         }
       }
+
+      // Re-pin after each iteration
       bPoints[0].x = badgeAnchor.x;
       bPoints[0].y = badgeAnchor.y;
       if (bDragging && bDragPoint !== null) {
@@ -327,8 +310,7 @@ document.querySelectorAll('a[href^="#"]').forEach((anchor) => {
     }
   }
 
-  // Rendering
-  let bSmoothTwist = 0;
+  // ── Rendering ──────────────────────────────
 
   function bRender() {
     bCtx2.clearRect(0, 0, bW, bH);
@@ -475,7 +457,8 @@ document.querySelectorAll('a[href^="#"]').forEach((anchor) => {
     bCtx2.restore();
   }
 
-  // Animation loop
+  // ── Animation loop ─────────────────────────
+
   function bLoop() {
     bSimulate();
     bRender();
@@ -483,7 +466,8 @@ document.querySelectorAll('a[href^="#"]').forEach((anchor) => {
   }
   bLoop();
 
-  // Hit testing
+  // ── Hit testing ────────────────────────────
+
   function bGetPos(e) {
     const rect = badgeCanvas.getBoundingClientRect();
     if (e.touches) return { x: e.touches[0].clientX - rect.left, y: e.touches[0].clientY - rect.top };
@@ -492,11 +476,10 @@ document.querySelectorAll('a[href^="#"]').forEach((anchor) => {
 
   function bHitTest(mx, my) {
     const tip = bPoints[bPoints.length - 1];
-    const angle = bSmoothAngle;
     const dmx = mx - tip.x;
     const dmy = my - tip.y;
-    const cos = Math.cos(-angle);
-    const sin = Math.sin(-angle);
+    const cos = Math.cos(-bSmoothAngle);
+    const sin = Math.sin(-bSmoothAngle);
     const lx = dmx * cos - dmy * sin;
     const ly = dmx * sin + dmy * cos;
     return lx >= -BBADGE_W / 2 && lx <= BBADGE_W / 2 && ly >= -10 && ly <= BBADGE_H - 10;
@@ -510,7 +493,8 @@ document.querySelectorAll('a[href^="#"]').forEach((anchor) => {
     return -1;
   }
 
-  // Proximity detection for pointer-events toggling
+  // ── Proximity detection ────────────────────
+
   function isNearBadge(pageX, pageY) {
     const rect = badgeCanvas.getBoundingClientRect();
     const cx = pageX - rect.left;
@@ -533,7 +517,6 @@ document.querySelectorAll('a[href^="#"]').forEach((anchor) => {
     return false;
   }
 
-  // Toggle pointer-events based on proximity
   document.addEventListener('mousemove', function (e) {
     if (bDragging) return;
     if (isNearBadge(e.clientX, e.clientY)) {
@@ -543,7 +526,8 @@ document.querySelectorAll('a[href^="#"]').forEach((anchor) => {
     }
   });
 
-  // Drag handlers
+  // ── Drag handlers ──────────────────────────
+
   function bOnDown(e) {
     const pos = bGetPos(e);
     const isTouch = !!e.touches;
@@ -595,13 +579,13 @@ document.querySelectorAll('a[href^="#"]').forEach((anchor) => {
     badgeCanvas.classList.remove('dragging');
   }
 
-  // Mouse events
+  // ── Event listeners ────────────────────────
+
   badgeCanvas.addEventListener('mousedown', bOnDown);
   badgeCanvas.addEventListener('mousemove', bOnMove);
   badgeCanvas.addEventListener('mouseup', bOnUp);
   badgeCanvas.addEventListener('mouseleave', bOnUp);
 
-  // Touch events
   badgeCanvas.addEventListener(
     'touchstart',
     function (e) {
