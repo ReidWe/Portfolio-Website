@@ -1,0 +1,457 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="cf-email-obfuscation" content="off">
+  <title>Superheterodyne AM/FM Radio — Reid Webster</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../css/styles.css">
+  <style>
+    .project-page {
+      position: relative;
+      z-index: 1;
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 0 2rem;
+    }
+
+    .back-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      margin-top: 6rem;
+      margin-bottom: 2rem;
+      padding: 0.6rem 1.2rem;
+      font-family: var(--font-mono);
+      font-size: 0.8rem;
+      color: var(--text-secondary);
+      text-decoration: none;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      transition: all 0.3s;
+      background: transparent;
+    }
+    .back-btn:hover {
+      color: var(--accent);
+      border-color: var(--accent);
+    }
+    .back-btn svg {
+      width: 16px;
+      height: 16px;
+    }
+
+    .project-hero {
+      margin-bottom: 3rem;
+    }
+    .project-hero .project-type-badge {
+      position: static;
+      display: inline-block;
+      margin-bottom: 1rem;
+    }
+    .project-hero h1 {
+      font-family: var(--font-heading);
+      font-size: clamp(2rem, 5vw, 3rem);
+      font-weight: 700;
+      letter-spacing: -1px;
+      line-height: 1.1;
+      margin-bottom: 1rem;
+    }
+    .project-hero .subtitle {
+      font-size: 1.1rem;
+      color: var(--text-secondary);
+      font-weight: 300;
+      line-height: 1.7;
+      max-width: 700px;
+    }
+
+    .project-tags-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+      margin: 1.5rem 0 2.5rem;
+    }
+
+    .project-gallery {
+      margin-bottom: 3rem;
+    }
+    .gallery-main {
+      width: 100%;
+      border-radius: 12px;
+      border: 1px solid var(--border);
+      overflow: hidden;
+      margin-bottom: 1rem;
+      background: var(--bg-card);
+    }
+    .gallery-main img {
+      width: 100%;
+      display: block;
+    }
+    .gallery-main .placeholder {
+      width: 100%;
+      height: 400px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--text-muted);
+      font-family: var(--font-mono);
+      font-size: 0.85rem;
+      flex-direction: column;
+      gap: 0.5rem;
+    }
+    .placeholder-hint {
+      font-size: 0.7rem;
+      color: var(--text-muted);
+      opacity: 0.6;
+    }
+    .gallery-thumbs {
+      display: flex;
+      gap: 0.75rem;
+      overflow-x: auto;
+    }
+    .gallery-thumbs img {
+      width: 120px;
+      height: 80px;
+      object-fit: cover;
+      border-radius: 8px;
+      border: 1px solid var(--border);
+      cursor: pointer;
+      transition: all 0.3s;
+      opacity: 0.6;
+    }
+    .gallery-thumbs img:hover,
+    .gallery-thumbs img.active {
+      opacity: 1;
+      border-color: var(--accent);
+    }
+
+    .project-section {
+      margin-bottom: 3rem;
+    }
+    .project-section h2 {
+      font-family: var(--font-heading);
+      font-size: 1.4rem;
+      font-weight: 600;
+      letter-spacing: -0.3px;
+      margin-bottom: 1rem;
+      color: var(--text-primary);
+    }
+    .project-section h2::before {
+      content: '';
+      display: inline-block;
+      width: 16px;
+      height: 2px;
+      background: var(--accent);
+      margin-right: 0.6rem;
+      vertical-align: middle;
+    }
+    .project-section p {
+      color: var(--text-secondary);
+      font-size: 1rem;
+      line-height: 1.85;
+      font-weight: 300;
+    }
+    .project-section p + p {
+      margin-top: 1rem;
+    }
+
+    .details-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1rem;
+      margin-top: 1rem;
+    }
+    .detail-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 1.2rem;
+    }
+    .detail-card .label {
+      font-family: var(--font-mono);
+      font-size: 0.68rem;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 1.5px;
+      margin-bottom: 0.3rem;
+    }
+    .detail-card .value {
+      font-size: 0.95rem;
+      font-weight: 500;
+      color: var(--text-primary);
+    }
+
+    .project-links {
+      display: flex;
+      gap: 1rem;
+      flex-wrap: wrap;
+      margin-top: 2rem;
+      padding-top: 2rem;
+      border-top: 1px solid var(--border);
+    }
+    .project-ext-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.7rem 1.4rem;
+      font-family: var(--font-mono);
+      font-size: 0.82rem;
+      color: var(--text-primary);
+      text-decoration: none;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      transition: all 0.3s;
+    }
+    .project-ext-link:hover {
+      border-color: var(--accent);
+      color: var(--accent);
+    }
+    .project-ext-link.primary {
+      background: var(--accent);
+      color: var(--bg-primary);
+      border-color: var(--accent);
+    }
+    .project-ext-link.primary:hover {
+      opacity: 0.9;
+      transform: translateY(-2px);
+    }
+
+    /* Block diagram */
+    .block-diagram {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 2rem;
+      margin: 1.5rem 0;
+      overflow-x: auto;
+    }
+
+    @media (max-width: 600px) {
+      .details-grid { grid-template-columns: 1fr; }
+      .project-page { padding: 0 1.2rem; }
+      .back-btn { margin-top: 5rem; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- Nav -->
+<nav>
+  <div class="nav-logo">
+    <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <path d="M2 12h4l2-2h3" stroke="var(--accent)" stroke-width="1.5" stroke-linecap="round"/>
+      <path d="M11 10v-4h4" stroke="var(--accent)" stroke-width="1.5" stroke-linecap="round"/>
+      <path d="M11 10v5l3 3h5" stroke="var(--accent)" stroke-width="1.5" stroke-linecap="round"/>
+      <path d="M15 6v4h5" stroke="var(--accent)" stroke-width="1.5" stroke-linecap="round" opacity="0.6"/>
+      <rect x="8.5" y="8" width="5" height="5" rx="0.8" stroke="var(--accent)" stroke-width="1.5" fill="var(--accent)" fill-opacity="0.15"/>
+      <circle cx="11" cy="10" r="1.2" fill="var(--accent)" opacity="0.8"/>
+      <circle cx="15" cy="6" r="1" fill="var(--accent)" opacity="0.6"/>
+      <circle cx="19" cy="18" r="1" fill="var(--accent)" opacity="0.6"/>
+    </svg>
+    Reid Webster
+  </div>
+  <ul class="nav-links">
+    <li><a href="../index.html#about">About</a></li>
+    <li><a href="../index.html#projects">Projects</a></li>
+    <li><a href="../index.html#contact">Contact</a></li>
+  </ul>
+</nav>
+
+<div class="project-page">
+
+  <!-- Back -->
+  <a href="../index.html#projects" class="back-btn">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
+      <path d="M19 12H5M12 5l-7 7 7 7"/>
+    </svg>
+    Back to Projects
+  </a>
+
+  <!-- Hero -->
+  <div class="project-hero">
+    <span class="project-type-badge hw">Hardware</span>
+    <h1>Superheterodyne AM/FM Radio</h1>
+    <p class="subtitle">
+      Built a fully functional superheterodyne receiver from discrete components — hand-soldered assembly
+      with complete circuit analysis and troubleshooting, documented in a formal IEEE-format technical report.
+    </p>
+  </div>
+
+  <!-- Tags -->
+  <div class="project-tags-row">
+    <span class="tag">Analog</span>
+    <span class="tag">Soldering</span>
+    <span class="tag warm">RF</span>
+    <span class="tag">Circuit Analysis</span>
+    <span class="tag blue">IEEE Report</span>
+  </div>
+
+  <!-- Gallery -->
+  <div class="project-gallery">
+    <div class="gallery-main" id="galleryMain">
+      <!-- Replace with: <img src="../assets/superhet-radio/hero.jpg" alt="Completed superhet radio"> -->
+      <div class="placeholder">
+        Add photos to assets/superhet-radio/
+        <span class="placeholder-hint">hero.jpg, pcb-top.jpg, soldering.jpg, etc.</span>
+      </div>
+    </div>
+    <!-- Uncomment and add real images:
+    <div class="gallery-thumbs">
+      <img src="../assets/superhet-radio/hero.jpg" alt="Completed radio" class="active" onclick="swapImg(this)">
+      <img src="../assets/superhet-radio/pcb-top.jpg" alt="PCB top view" onclick="swapImg(this)">
+      <img src="../assets/superhet-radio/soldering.jpg" alt="Soldering closeup" onclick="swapImg(this)">
+      <img src="../assets/superhet-radio/scope.jpg" alt="Oscilloscope capture" onclick="swapImg(this)">
+    </div>
+    -->
+  </div>
+
+  <!-- Overview -->
+  <div class="project-section">
+    <h2>Overview</h2>
+    <p>
+      This project involved the complete assembly and analysis of a superheterodyne AM/FM radio receiver.
+      The superhet architecture — the dominant receiver topology since the 1930s — works by converting
+      incoming RF signals to a fixed intermediate frequency (IF) using a local oscillator and mixer stage,
+      which allows for high selectivity and sensitivity regardless of the tuned station.
+    </p>
+    <p>
+      Every component was hand-soldered to the PCB, and the build process required careful attention to
+      grounding, lead dress, and solder joint quality to avoid oscillation and noise issues. The project
+      culminated in a comprehensive IEEE-format technical report covering the theory of operation,
+      assembly process, troubleshooting steps, and measured performance.
+    </p>
+  </div>
+
+  <!-- Signal chain block diagram -->
+  <div class="project-section">
+    <h2>Signal Chain</h2>
+    <div class="block-diagram">
+      <svg viewBox="0 0 700 120" fill="none" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:auto;">
+        <!-- Antenna -->
+        <g stroke="#3df0c0" stroke-width="1.2" opacity="0.5">
+          <line x1="20" y1="30" x2="20" y2="60"/>
+          <line x1="12" y1="30" x2="28" y2="30"/>
+          <line x1="15" y1="25" x2="25" y2="25"/>
+        </g>
+        <line x1="20" y1="60" x2="60" y2="60" stroke="#3df0c0" stroke-width="1" opacity="0.3"/>
+
+        <!-- RF Amp -->
+        <rect x="60" y="42" width="70" height="36" rx="4" stroke="#3df0c0" stroke-width="1.2" fill="#3df0c008" opacity="0.6"/>
+        <text x="95" y="64" text-anchor="middle" fill="#3df0c0" font-size="10" font-family="'IBM Plex Mono',monospace" opacity="0.7">RF Amp</text>
+        <line x1="130" y1="60" x2="170" y2="60" stroke="#3df0c0" stroke-width="1" opacity="0.3"/>
+
+        <!-- Mixer -->
+        <circle cx="195" cy="60" r="22" stroke="#f0a03d" stroke-width="1.2" fill="#f0a03d08" opacity="0.6"/>
+        <text x="195" y="64" text-anchor="middle" fill="#f0a03d" font-size="10" font-family="'IBM Plex Mono',monospace" opacity="0.7">Mix</text>
+        <!-- LO -->
+        <line x1="195" y1="82" x2="195" y2="105" stroke="#f0a03d" stroke-width="1" opacity="0.3"/>
+        <rect x="168" y="105" width="54" height="14" rx="3" stroke="#f0a03d" stroke-width="0.8" fill="none" opacity="0.3"/>
+        <text x="195" y="115" text-anchor="middle" fill="#f0a03d" font-size="7" font-family="'IBM Plex Mono',monospace" opacity="0.5">Local Osc</text>
+
+        <line x1="217" y1="60" x2="260" y2="60" stroke="#3df0c0" stroke-width="1" opacity="0.3"/>
+
+        <!-- IF Filter/Amp -->
+        <rect x="260" y="42" width="80" height="36" rx="4" stroke="#3df0c0" stroke-width="1.2" fill="#3df0c008" opacity="0.6"/>
+        <text x="300" y="64" text-anchor="middle" fill="#3df0c0" font-size="10" font-family="'IBM Plex Mono',monospace" opacity="0.7">IF Stage</text>
+        <line x1="340" y1="60" x2="390" y2="60" stroke="#3df0c0" stroke-width="1" opacity="0.3"/>
+
+        <!-- Detector -->
+        <rect x="390" y="42" width="80" height="36" rx="4" stroke="#3d8ef0" stroke-width="1.2" fill="#3d8ef008" opacity="0.6"/>
+        <text x="430" y="64" text-anchor="middle" fill="#3d8ef0" font-size="10" font-family="'IBM Plex Mono',monospace" opacity="0.7">Detector</text>
+        <line x1="470" y1="60" x2="520" y2="60" stroke="#3df0c0" stroke-width="1" opacity="0.3"/>
+
+        <!-- Audio Amp -->
+        <rect x="520" y="42" width="80" height="36" rx="4" stroke="#3df0c0" stroke-width="1.2" fill="#3df0c008" opacity="0.6"/>
+        <text x="560" y="64" text-anchor="middle" fill="#3df0c0" font-size="10" font-family="'IBM Plex Mono',monospace" opacity="0.7">Audio</text>
+        <line x1="600" y1="60" x2="640" y2="60" stroke="#3df0c0" stroke-width="1" opacity="0.3"/>
+
+        <!-- Speaker -->
+        <g stroke="#3df0c0" stroke-width="1.2" opacity="0.5">
+          <rect x="640" y="50" width="12" height="20" rx="2"/>
+          <path d="M652,46 L668,36 V84 L652,70"/>
+        </g>
+      </svg>
+    </div>
+    <p>
+      The receiver follows the classic superhet signal chain: incoming RF is amplified, mixed with a
+      local oscillator to produce an intermediate frequency, filtered and amplified at IF, demodulated
+      by the detector, and finally driven through an audio amplifier to the speaker.
+    </p>
+  </div>
+
+  <!-- Assembly & Soldering -->
+  <div class="project-section">
+    <h2>Assembly & Soldering</h2>
+    <p>
+      The entire radio was assembled by hand on a through-hole PCB. This involved soldering resistors,
+      capacitors, inductors, diodes, transistors, and IC packages. Particular care was taken with the
+      RF and IF sections where poor solder joints or excess lead length can introduce parasitic
+      capacitance and cause unwanted oscillation or signal loss.
+    </p>
+    <p>
+      Troubleshooting was a significant part of the process — cold solder joints, bridged pads, and
+      component orientation errors all had to be identified and corrected. Each stage was tested
+      incrementally before moving to the next, following a methodical signal-chain verification approach.
+    </p>
+  </div>
+
+  <!-- Technical Details -->
+  <div class="project-section">
+    <h2>Technical Details</h2>
+    <div class="details-grid">
+      <div class="detail-card">
+        <div class="label">Architecture</div>
+        <div class="value">Superheterodyne (AM/FM)</div>
+      </div>
+      <div class="detail-card">
+        <div class="label">Assembly</div>
+        <div class="value">Through-hole, hand-soldered</div>
+      </div>
+      <div class="detail-card">
+        <div class="label">Documentation</div>
+        <div class="value">IEEE-format technical report</div>
+      </div>
+      <div class="detail-card">
+        <div class="label">Status</div>
+        <div class="value">Complete</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- IEEE Report -->
+  <div class="project-section">
+    <h2>IEEE Technical Report</h2>
+    <p>
+      The project was formally documented in an IEEE-format report covering the superheterodyne
+      theory of operation, complete assembly procedure, troubleshooting methodology, circuit analysis
+      of each stage, and measured results. The report follows IEEE conference paper formatting
+      standards including proper citations, figures, and technical writing conventions.
+    </p>
+  </div>
+
+  <!-- Links -->
+  <div class="project-links">
+    <!-- Uncomment and update when you have the PDF or repo link:
+    <a href="../assets/superhet-radio/ieee-report.pdf" class="project-ext-link primary" target="_blank">Read IEEE Report (PDF)</a>
+    -->
+    <a href="../index.html#projects" class="project-ext-link">← Back to All Projects</a>
+  </div>
+
+</div>
+
+<footer>
+  <p>Designed & built by Reid Webster · © 2026</p>
+</footer>
+
+<script src="../js/main.js"></script>
+<script>
+  function swapImg(thumb) {
+    var main = document.getElementById('galleryMain');
+    main.innerHTML = '<img src="' + thumb.src + '" alt="' + thumb.alt + '">';
+    document.querySelectorAll('.gallery-thumbs img').forEach(function(t) { t.classList.remove('active'); });
+    thumb.classList.add('active');
+  }
+</script>
+</body>
+</html>

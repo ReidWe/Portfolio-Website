@@ -681,6 +681,55 @@ section {
   box-shadow: var(--glow);
 }
 
+.contact-btn {
+  position: relative;
+}
+
+.contact-btn.showing-info {
+  border-color: var(--accent-mid);
+  color: var(--accent);
+}
+
+.contact-btn.copied {
+  border-color: var(--accent);
+  color: var(--accent);
+  background: var(--accent-dim);
+}
+
+.copy-hint {
+  position: absolute;
+  bottom: calc(100% + 8px);
+  left: 50%;
+  transform: translateX(-50%) scale(0.9);
+  background: var(--bg-card);
+  border: 1px solid var(--accent-mid);
+  color: var(--accent);
+  font-family: var(--font-mono);
+  font-size: 0.65rem;
+  letter-spacing: 0.5px;
+  padding: 0.35rem 0.7rem;
+  border-radius: 6px;
+  white-space: nowrap;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.2s, transform 0.2s;
+}
+
+.copy-hint::after {
+  content: '';
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  border: 5px solid transparent;
+  border-top-color: var(--accent-mid);
+}
+
+.contact-btn:hover .copy-hint {
+  opacity: 1;
+  transform: translateX(-50%) scale(1);
+}
+
 
 /* ══════════════════════════════════════
    FOOTER

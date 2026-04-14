@@ -258,128 +258,67 @@
   <div class="section-title">What I've built</div>
   <div class="projects-grid">
 
-    <div class="project-card">
+    <div class="project-card" onclick="window.location='projects/superhet-radio.html'">
       <div class="project-preview">
         <svg viewBox="0 0 400 200" xmlns="http://www.w3.org/2000/svg">
-          <rect width="400" height="200" fill="#0c1a26"/>
-          <g stroke="#3df0c030" stroke-width="1" fill="none">
-            <path d="M20,100 H80 L100,70 H180 L200,100 H260"/>
-            <path d="M140,30 V70 L160,90 V160"/>
-            <path d="M260,100 L280,60 H360"/>
-            <path d="M260,100 L280,140 H340"/>
+          <rect width="400" height="200" fill="#0c1520"/>
+          <!-- Superhet block diagram hint -->
+          <g stroke="#3df0c035" stroke-width="1" fill="none">
+            <!-- Antenna -->
+            <line x1="30" y1="60" x2="30" y2="100"/>
+            <line x1="20" y1="60" x2="40" y2="60"/>
+            <line x1="25" y1="55" x2="35" y2="55"/>
+            <!-- Antenna to mixer -->
+            <path d="M30,100 H70"/>
+            <!-- RF amp -->
+            <rect x="70" y="85" width="40" height="30" rx="2"/>
+            <text x="90" y="104" text-anchor="middle" fill="#3df0c050" font-size="6" font-family="monospace">RF</text>
+            <!-- To mixer -->
+            <path d="M110,100 H150"/>
+            <!-- Mixer (circle with X) -->
+            <circle cx="165" cy="100" r="15"/>
+            <line x1="155" y1="90" x2="175" y2="110"/>
+            <line x1="175" y1="90" x2="155" y2="110"/>
+            <!-- LO input -->
+            <path d="M165,130 V115"/>
+            <rect x="148" y="130" width="34" height="20" rx="2"/>
+            <text x="165" y="144" text-anchor="middle" fill="#f0a03d40" font-size="6" font-family="monospace">LO</text>
+            <!-- IF stage -->
+            <path d="M180,100 H220"/>
+            <rect x="220" y="85" width="40" height="30" rx="2"/>
+            <text x="240" y="104" text-anchor="middle" fill="#3df0c050" font-size="6" font-family="monospace">IF</text>
+            <!-- Detector -->
+            <path d="M260,100 H290"/>
+            <rect x="290" y="85" width="40" height="30" rx="2"/>
+            <text x="310" y="104" text-anchor="middle" fill="#3df0c050" font-size="6" font-family="monospace">DET</text>
+            <!-- Audio out -->
+            <path d="M330,100 H360"/>
+            <!-- Speaker symbol -->
+            <rect x="360" y="92" width="10" height="16" rx="1"/>
+            <path d="M370,88 L385,78 V122 L370,108"/>
           </g>
-          <g fill="#3df0c040"><circle cx="100" cy="70" r="4"/><circle cx="260" cy="100" r="5"/><circle cx="180" cy="70" r="3"/></g>
-          <rect x="160" y="75" width="40" height="28" rx="2" stroke="#3df0c050" fill="#3df0c008" stroke-width="1"/>
-          <text x="180" y="93" text-anchor="middle" fill="#3df0c060" font-size="8" font-family="monospace">MCU</text>
+          <!-- Signal wave hints -->
+          <g stroke="#f0a03d25" stroke-width="0.8" fill="none">
+            <path d="M45,100 Q50,92 55,100 T65,100"/>
+            <path d="M125,100 Q130,92 135,100 T145,100"/>
+          </g>
+          <g stroke="#3d8ef020" stroke-width="0.8" fill="none">
+            <path d="M345,100 Q348,94 351,100 T357,100"/>
+          </g>
         </svg>
         <span class="project-number">01</span>
         <span class="project-type-badge hw">Hardware</span>
       </div>
       <div class="project-info">
         <div class="project-tags">
-          <span class="tag">KiCad</span>
-          <span class="tag">STM32</span>
-          <span class="tag warm">C</span>
-        </div>
-        <h3>Custom Motor Controller PCB</h3>
-        <p>Designed a 4-layer board with gate drivers and current sensing for brushless DC motor control with closed-loop feedback.</p>
-        <a href="#" class="project-link">View project →</a>
-      </div>
-    </div>
-
-    <div class="project-card">
-      <div class="project-preview">
-        <svg viewBox="0 0 400 200" xmlns="http://www.w3.org/2000/svg">
-          <rect width="400" height="200" fill="#0f0d1a"/>
-          <g stroke="#f0a03d40" stroke-width="1.5" fill="none">
-            <path d="M20,100 Q60,40 100,100 T180,100 T260,100 T340,100 T400,100"/>
-          </g>
-          <g stroke="#3d8ef030" stroke-width="1" fill="none">
-            <path d="M20,120 Q70,70 120,120 T220,120 T320,120 T400,120"/>
-          </g>
-          <g stroke="#ffffff06" stroke-width="0.5">
-            <line x1="0" y1="50" x2="400" y2="50"/><line x1="0" y1="100" x2="400" y2="100"/><line x1="0" y1="150" x2="400" y2="150"/>
-            <line x1="100" y1="0" x2="100" y2="200"/><line x1="200" y1="0" x2="200" y2="200"/><line x1="300" y1="0" x2="300" y2="200"/>
-          </g>
-          <text x="20" y="25" fill="#f0a03d40" font-size="9" font-family="monospace">CH1: 2V/div</text>
-          <text x="20" y="38" fill="#3d8ef030" font-size="9" font-family="monospace">CH2: 1V/div</text>
-        </svg>
-        <span class="project-number">02</span>
-        <span class="project-type-badge mixed">HW + SW</span>
-      </div>
-      <div class="project-info">
-        <div class="project-tags">
-          <span class="tag">DSP</span>
-          <span class="tag warm">MATLAB</span>
-          <span class="tag blue">Python</span>
-        </div>
-        <h3>Audio Spectrum Analyzer</h3>
-        <p>Built a real-time FFT spectrum analyzer using an ADC front-end and custom DSP pipeline, with a live visualization interface.</p>
-        <a href="#" class="project-link">View project →</a>
-      </div>
-    </div>
-
-    <div class="project-card">
-      <div class="project-preview">
-        <svg viewBox="0 0 400 200" xmlns="http://www.w3.org/2000/svg">
-          <rect width="400" height="200" fill="#091210"/>
-          <g fill="none" stroke="#3df0c025" stroke-width="0.8">
-            <circle cx="200" cy="100" r="30"/>
-            <circle cx="100" cy="60" r="15"/><circle cx="300" cy="60" r="15"/>
-            <circle cx="80" cy="150" r="15"/><circle cx="320" cy="150" r="15"/>
-            <line x1="170" y1="90" x2="115" y2="65"/>
-            <line x1="230" y1="90" x2="285" y2="65"/>
-            <line x1="175" y1="115" x2="95" y2="145"/>
-            <line x1="225" y1="115" x2="305" y2="145"/>
-          </g>
-          <g fill="#3df0c030"><circle cx="200" cy="100" r="5"/><circle cx="100" cy="60" r="3"/><circle cx="300" cy="60" r="3"/><circle cx="80" cy="150" r="3"/><circle cx="320" cy="150" r="3"/></g>
-          <text x="200" y="104" text-anchor="middle" fill="#3df0c050" font-size="7" font-family="monospace">HUB</text>
-        </svg>
-        <span class="project-number">03</span>
-        <span class="project-type-badge mixed">HW + SW</span>
-      </div>
-      <div class="project-info">
-        <div class="project-tags">
-          <span class="tag">ESP32</span>
-          <span class="tag">MQTT</span>
-          <span class="tag warm">PCB</span>
-        </div>
-        <h3>Wireless Sensor Network</h3>
-        <p>Designed a mesh of battery-powered sensor nodes with a custom PCB, low-power sleep modes, and a central gateway for data logging.</p>
-        <a href="#" class="project-link">View project →</a>
-      </div>
-    </div>
-
-    <div class="project-card">
-      <div class="project-preview">
-        <svg viewBox="0 0 400 200" xmlns="http://www.w3.org/2000/svg">
-          <rect width="400" height="200" fill="#10080e"/>
-          <g stroke="#c03df040" stroke-width="1" fill="none">
-            <rect x="160" y="70" width="80" height="60" rx="3"/>
-            <text x="200" y="105" text-anchor="middle" fill="#c03df050" font-size="8" font-family="monospace">LDO</text>
-            <line x1="100" y1="90" x2="160" y2="90"/>
-            <line x1="240" y1="90" x2="310" y2="90"/>
-            <line x1="130" y1="100" x2="130" y2="115"/><line x1="135" y1="100" x2="135" y2="115"/>
-            <line x1="280" y1="100" x2="280" y2="115"/><line x1="285" y1="100" x2="285" y2="115"/>
-            <line x1="200" y1="130" x2="200" y2="150"/>
-            <line x1="190" y1="150" x2="210" y2="150"/>
-            <line x1="194" y1="155" x2="206" y2="155"/>
-          </g>
-          <text x="90" y="87" text-anchor="end" fill="#c03df040" font-size="9" font-family="monospace">12V</text>
-          <text x="320" y="87" fill="#c03df040" font-size="9" font-family="monospace">3.3V</text>
-        </svg>
-        <span class="project-number">04</span>
-        <span class="project-type-badge hw">Hardware</span>
-      </div>
-      <div class="project-info">
-        <div class="project-tags">
-          <span class="tag">Power</span>
-          <span class="tag warm">Altium</span>
           <span class="tag">Analog</span>
+          <span class="tag">Soldering</span>
+          <span class="tag warm">RF</span>
+          <span class="tag blue">IEEE</span>
         </div>
-        <h3>Multi-Rail Power Supply</h3>
-        <p>Designed a compact, efficient power supply with 5V/3.3V/1.8V rails, featuring load regulation, thermal protection, and low ripple.</p>
-        <a href="#" class="project-link">View project →</a>
+        <h3>Superheterodyne AM/FM Radio</h3>
+        <p>Assembled and analyzed a superhet receiver from component level, covering RF mixing, IF filtering, and audio demodulation. Documented in a full IEEE-format report.</p>
+        <a href="projects/superhet-radio.html" class="project-link">View project →</a>
       </div>
     </div>
 
@@ -396,8 +335,8 @@
     <h3>Have a project in mind?</h3>
     <p>Always happy to talk circuits, collaborate on builds, or explore new opportunities.</p>
     <div class="contact-links">
-      <a href="mailto:reidwebster@verizon.net" class="contact-btn">✉ Email</a>
-      <a href="#" class="contact-btn" id="phoneBtn" onclick="copyPhone(event)">📞 Phone</a>
+      <a href="#" class="contact-btn" id="emailBtn" onclick="toggleEmail(event)">✉ Email</a>
+      <a href="#" class="contact-btn" id="phoneBtn" onclick="togglePhone(event)">📞 Phone</a>
       <a href="https://www.linkedin.com/in/reidwebsteronline" class="contact-btn" target="_blank">💼 LinkedIn</a>
     </div>
   </div>
