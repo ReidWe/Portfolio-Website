@@ -1,0 +1,404 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="cf-email-obfuscation" content="off">
+  <!-- ═══ TEMPLATE: Change the title for each project ═══ -->
+  <title>Project Name — Reid Webster</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <!-- CSS is one level up -->
+  <link rel="stylesheet" href="../css/styles.css">
+  <style>
+    /* ══════════════════════════════════════
+       PROJECT PAGE STYLES
+       (scoped to project pages only)
+       ══════════════════════════════════════ */
+
+    .project-page {
+      position: relative;
+      z-index: 1;
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 0 2rem;
+    }
+
+    /* ── Back button ── */
+    .back-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      margin-top: 6rem;
+      margin-bottom: 2rem;
+      padding: 0.6rem 1.2rem;
+      font-family: var(--font-mono);
+      font-size: 0.8rem;
+      color: var(--text-secondary);
+      text-decoration: none;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      transition: all 0.3s;
+      background: transparent;
+    }
+    .back-btn:hover {
+      color: var(--accent);
+      border-color: var(--accent);
+    }
+    .back-btn svg {
+      width: 16px;
+      height: 16px;
+    }
+
+    /* ── Project hero ── */
+    .project-hero {
+      margin-bottom: 3rem;
+    }
+    .project-hero .project-type-badge {
+      position: static;
+      display: inline-block;
+      margin-bottom: 1rem;
+    }
+    .project-hero h1 {
+      font-family: var(--font-heading);
+      font-size: clamp(2rem, 5vw, 3rem);
+      font-weight: 700;
+      letter-spacing: -1px;
+      line-height: 1.1;
+      margin-bottom: 1rem;
+    }
+    .project-hero .subtitle {
+      font-size: 1.1rem;
+      color: var(--text-secondary);
+      font-weight: 300;
+      line-height: 1.7;
+      max-width: 700px;
+    }
+
+    /* ── Tags row ── */
+    .project-tags-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+      margin: 1.5rem 0 2.5rem;
+    }
+
+    /* ── Image gallery ── */
+    .project-gallery {
+      margin-bottom: 3rem;
+    }
+    .gallery-main {
+      width: 100%;
+      border-radius: 12px;
+      border: 1px solid var(--border);
+      overflow: hidden;
+      margin-bottom: 1rem;
+      background: var(--bg-card);
+    }
+    .gallery-main img {
+      width: 100%;
+      display: block;
+    }
+    .gallery-main .placeholder {
+      width: 100%;
+      height: 400px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--text-muted);
+      font-family: var(--font-mono);
+      font-size: 0.85rem;
+    }
+    .gallery-thumbs {
+      display: flex;
+      gap: 0.75rem;
+      overflow-x: auto;
+    }
+    .gallery-thumbs img {
+      width: 120px;
+      height: 80px;
+      object-fit: cover;
+      border-radius: 8px;
+      border: 1px solid var(--border);
+      cursor: pointer;
+      transition: all 0.3s;
+      opacity: 0.6;
+    }
+    .gallery-thumbs img:hover,
+    .gallery-thumbs img.active {
+      opacity: 1;
+      border-color: var(--accent);
+    }
+
+    /* ── Content sections ── */
+    .project-section {
+      margin-bottom: 3rem;
+    }
+    .project-section h2 {
+      font-family: var(--font-heading);
+      font-size: 1.4rem;
+      font-weight: 600;
+      letter-spacing: -0.3px;
+      margin-bottom: 1rem;
+      color: var(--text-primary);
+    }
+    .project-section h2::before {
+      content: '';
+      display: inline-block;
+      width: 16px;
+      height: 2px;
+      background: var(--accent);
+      margin-right: 0.6rem;
+      vertical-align: middle;
+    }
+    .project-section p {
+      color: var(--text-secondary);
+      font-size: 1rem;
+      line-height: 1.85;
+      font-weight: 300;
+    }
+    .project-section p + p {
+      margin-top: 1rem;
+    }
+
+    /* ── Details grid ── */
+    .details-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1rem;
+      margin-top: 1rem;
+    }
+    .detail-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 1.2rem;
+    }
+    .detail-card .label {
+      font-family: var(--font-mono);
+      font-size: 0.68rem;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 1.5px;
+      margin-bottom: 0.3rem;
+    }
+    .detail-card .value {
+      font-size: 0.95rem;
+      font-weight: 500;
+      color: var(--text-primary);
+    }
+
+    /* ── Links row ── */
+    .project-links {
+      display: flex;
+      gap: 1rem;
+      flex-wrap: wrap;
+      margin-top: 2rem;
+      padding-top: 2rem;
+      border-top: 1px solid var(--border);
+    }
+    .project-ext-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.7rem 1.4rem;
+      font-family: var(--font-mono);
+      font-size: 0.82rem;
+      color: var(--text-primary);
+      text-decoration: none;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      transition: all 0.3s;
+    }
+    .project-ext-link:hover {
+      border-color: var(--accent);
+      color: var(--accent);
+    }
+    .project-ext-link.primary {
+      background: var(--accent);
+      color: var(--bg-primary);
+      border-color: var(--accent);
+    }
+    .project-ext-link.primary:hover {
+      opacity: 0.9;
+      transform: translateY(-2px);
+    }
+
+    /* ── Footer spacing ── */
+    .project-page footer {
+      margin-top: 4rem;
+    }
+
+    /* ── Responsive ── */
+    @media (max-width: 600px) {
+      .details-grid {
+        grid-template-columns: 1fr;
+      }
+      .project-page {
+        padding: 0 1.2rem;
+      }
+      .back-btn {
+        margin-top: 5rem;
+      }
+    }
+  </style>
+</head>
+<body>
+
+<!-- Nav (same as main site) -->
+<nav>
+  <div class="nav-logo">
+    <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <path d="M2 12h4l2-2h3" stroke="var(--accent)" stroke-width="1.5" stroke-linecap="round"/>
+      <path d="M11 10v-4h4" stroke="var(--accent)" stroke-width="1.5" stroke-linecap="round"/>
+      <path d="M11 10v5l3 3h5" stroke="var(--accent)" stroke-width="1.5" stroke-linecap="round"/>
+      <path d="M15 6v4h5" stroke="var(--accent)" stroke-width="1.5" stroke-linecap="round" opacity="0.6"/>
+      <rect x="8.5" y="8" width="5" height="5" rx="0.8" stroke="var(--accent)" stroke-width="1.5" fill="var(--accent)" fill-opacity="0.15"/>
+      <circle cx="11" cy="10" r="1.2" fill="var(--accent)" opacity="0.8"/>
+      <circle cx="15" cy="6" r="1" fill="var(--accent)" opacity="0.6"/>
+      <circle cx="19" cy="18" r="1" fill="var(--accent)" opacity="0.6"/>
+    </svg>
+    Reid Webster
+  </div>
+  <ul class="nav-links">
+    <li><a href="../index.html#about">About</a></li>
+    <li><a href="../index.html#projects">Projects</a></li>
+    <li><a href="../index.html#contact">Contact</a></li>
+  </ul>
+</nav>
+
+<div class="project-page">
+
+  <!-- Back button -->
+  <a href="../index.html#projects" class="back-btn">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
+      <path d="M19 12H5M12 5l-7 7 7 7"/>
+    </svg>
+    Back to Projects
+  </a>
+
+  <!-- ═══════════════════════════════════════
+       PROJECT HERO
+       Change: badge type, title, subtitle
+       ═══════════════════════════════════════ -->
+  <div class="project-hero">
+    <!-- Badge: use class "hw" for hardware, "sw" for software, "mixed" for both -->
+    <span class="project-type-badge hw">Hardware</span>
+    <h1>Project Title Goes Here</h1>
+    <p class="subtitle">
+      A one or two sentence summary of what this project is and why it matters.
+      Keep it punchy — this is the first thing people read.
+    </p>
+  </div>
+
+  <!-- Tags -->
+  <div class="project-tags-row">
+    <span class="tag">Tag1</span>
+    <span class="tag">Tag2</span>
+    <span class="tag warm">Tag3</span>
+    <span class="tag blue">Tag4</span>
+  </div>
+
+  <!-- ═══════════════════════════════════════
+       IMAGE GALLERY
+       Replace placeholder with real images.
+       Add/remove thumbnail <img> tags as needed.
+       ═══════════════════════════════════════ -->
+  <div class="project-gallery">
+    <div class="gallery-main" id="galleryMain">
+      <!-- Replace this div with: <img src="../assets/project-name/hero.jpg" alt="..."> -->
+      <div class="placeholder">Add project images to assets/ folder</div>
+    </div>
+    <!-- Optional: thumbnail row for multiple images
+    <div class="gallery-thumbs">
+      <img src="../assets/project-name/img1.jpg" alt="..." class="active" onclick="swapImg(this)">
+      <img src="../assets/project-name/img2.jpg" alt="..." onclick="swapImg(this)">
+      <img src="../assets/project-name/img3.jpg" alt="..." onclick="swapImg(this)">
+    </div>
+    -->
+  </div>
+
+  <!-- ═══════════════════════════════════════
+       OVERVIEW
+       ═══════════════════════════════════════ -->
+  <div class="project-section">
+    <h2>Overview</h2>
+    <p>
+      Describe the project at a high level. What problem does it solve? What was the
+      motivation? Give enough context so someone unfamiliar can understand the scope.
+    </p>
+    <p>
+      Add a second paragraph if needed for additional context, background, or the
+      story behind why you built this.
+    </p>
+  </div>
+
+  <!-- ═══════════════════════════════════════
+       TECHNICAL DETAILS
+       ═══════════════════════════════════════ -->
+  <div class="project-section">
+    <h2>Technical Details</h2>
+    <p>
+      Go deeper into the engineering. Talk about your design choices, architecture,
+      challenges you faced, and how you solved them. This is where you show depth.
+    </p>
+    <div class="details-grid">
+      <div class="detail-card">
+        <div class="label">Platform</div>
+        <div class="value">e.g. STM32F4, ESP32, custom PCB</div>
+      </div>
+      <div class="detail-card">
+        <div class="label">Tools</div>
+        <div class="value">e.g. KiCad, Altium, MATLAB</div>
+      </div>
+      <div class="detail-card">
+        <div class="label">Languages</div>
+        <div class="value">e.g. C, Python, Verilog</div>
+      </div>
+      <div class="detail-card">
+        <div class="label">Status</div>
+        <div class="value">e.g. Complete, In Progress</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════
+       RESULTS / OUTCOME (optional)
+       ═══════════════════════════════════════ -->
+  <div class="project-section">
+    <h2>Results</h2>
+    <p>
+      What was the outcome? Performance numbers, what you learned, what you'd
+      do differently. Photos, scope captures, or test data are great here too.
+    </p>
+  </div>
+
+  <!-- ═══════════════════════════════════════
+       LINKS (optional — GitHub, live demo, etc.)
+       Remove this section if no external links.
+       ═══════════════════════════════════════ -->
+  <div class="project-links">
+    <a href="#" class="project-ext-link primary">View Source Code</a>
+    <a href="#" class="project-ext-link">Live Demo</a>
+    <a href="#" class="project-ext-link">Documentation</a>
+  </div>
+
+</div>
+
+<footer>
+  <p>Designed & built by Reid Webster · © 2026</p>
+</footer>
+
+<!-- Only need main.js for scroll reveal on project pages -->
+<script src="../js/main.js"></script>
+<script>
+  // Optional: thumbnail gallery swap
+  function swapImg(thumb) {
+    const main = document.getElementById('galleryMain');
+    main.innerHTML = '<img src="' + thumb.src + '" alt="' + thumb.alt + '">';
+    document.querySelectorAll('.gallery-thumbs img').forEach(t => t.classList.remove('active'));
+    thumb.classList.add('active');
+  }
+</script>
+</body>
+</html>
