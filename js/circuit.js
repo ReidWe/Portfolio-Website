@@ -41,8 +41,8 @@
       [250,30],[250,55],
       [242,61],[258,70],[242,79],[258,88],[242,97],
       [250,100],[250,155],
-      [220,182],[220,210],
-      [250,238],[250,280],
+      [220,183],[220,209],
+      [250,235],[250,280],
       [242,286],[258,295],[242,304],[258,313],[242,322],
       [250,330],[250,355]
     ],
@@ -60,11 +60,11 @@
     ],
     // Bypass: emitter junction → C2 → ground
     bypass: [
-      [250,280],[308,280],[320,280],[320,310],[320,355]
+      [250,280],[308,280],[320,280],[320,355]
     ],
-    // Input: Vin → C1 → base
+    // Input: Vin edge → C1 → base
     input: [
-      [60,200],[125,200],[140,200],[207,200]
+      [76,200],[125,200],[140,200],[207,200]
     ]
   };
 
@@ -113,23 +113,23 @@
 
   const particles = [
     // Main current (3 particles, staggered)
-    { path: 'main', speed: 0.22, offset: 0.0,  r: 3,   color: [61, 240, 192], alpha: 0.85 },
-    { path: 'main', speed: 0.22, offset: 0.33, r: 3,   color: [61, 240, 192], alpha: 0.7  },
-    { path: 'main', speed: 0.22, offset: 0.66, r: 3,   color: [61, 240, 192], alpha: 0.6  },
+    { path: 'main', speed: 0.45, offset: 0.0,  r: 3,   color: [61, 240, 192], alpha: 0.85 },
+    { path: 'main', speed: 0.45, offset: 0.33, r: 3,   color: [61, 240, 192], alpha: 0.7  },
+    { path: 'main', speed: 0.45, offset: 0.66, r: 3,   color: [61, 240, 192], alpha: 0.6  },
 
     // Bias current (2 particles)
-    { path: 'bias', speed: 0.17, offset: 0.0,  r: 2.5, color: [61, 240, 192], alpha: 0.6  },
-    { path: 'bias', speed: 0.17, offset: 0.5,  r: 2.5, color: [61, 240, 192], alpha: 0.5  },
+    { path: 'bias', speed: 0.35, offset: 0.0,  r: 2.5, color: [61, 240, 192], alpha: 0.6  },
+    { path: 'bias', speed: 0.35, offset: 0.5,  r: 2.5, color: [61, 240, 192], alpha: 0.5  },
 
     // Output signal
-    { path: 'output', speed: 0.4, offset: 0.0,  r: 2.5, color: [61, 240, 192], alpha: 0.7 },
+    { path: 'output', speed: 0.8, offset: 0.0,  r: 2.5, color: [61, 240, 192], alpha: 0.7 },
 
     // Bypass (blue tint)
-    { path: 'bypass', speed: 0.3, offset: 0.0,  r: 2.2, color: [61, 142, 240], alpha: 0.6 },
+    { path: 'bypass', speed: 0.6, offset: 0.0,  r: 2.2, color: [61, 142, 240], alpha: 0.6 },
 
     // Input signal (warm)
-    { path: 'input', speed: 0.28, offset: 0.0,  r: 2.5, color: [240, 160, 61], alpha: 0.55 },
-    { path: 'input', speed: 0.28, offset: 0.5,  r: 2,   color: [240, 160, 61], alpha: 0.4  },
+    { path: 'input', speed: 0.55, offset: 0.0,  r: 2.5, color: [240, 160, 61], alpha: 0.55 },
+    { path: 'input', speed: 0.55, offset: 0.5,  r: 2,   color: [240, 160, 61], alpha: 0.4  },
   ];
 
   // ── Animation loop ─────────────────────────
