@@ -185,6 +185,9 @@
   // ══════════════════════════════════════
   // Particle definitions
   // ══════════════════════════════════════
+  // SPEED_MULT scales all particle speeds globally —
+  // bump this up to make the flow faster, down to slow it.
+  var SPEED_MULT = 3.0;
 
   var particles = [
     { path: 'upperLoop',      speed: 0.15, offset: 0.00, r: 2.5, alpha: 0.75 },
@@ -213,17 +216,46 @@
     { path: 'ampBottomRight', speed: 0.40, offset: 0.00, r: 2.3, alpha: 0.60 }
   ];
 
+  // Apply the global speed multiplier
+  for (var si = 0; si < particles.length; si++) {
+    particles[si].speed *= SPEED_MULT;
+  }
+
   var GREEN = [61, 240, 192];
+  var WARM  = [240, 160, 61];
+
+  // ══════════════════════════════════════
+  // Oscillator — controls how fast the current
+  // reverses direction. One full cycle = one
+  // forward swing + one backward swing.
+  // ══════════════════════════════════════
+  var OSC_HZ = 0.35; // cycles per second
+
+  // Per-particle phase accumulator. Updated each frame
+  // based on dt * speed * sin(osc), so particles truly
+  // reverse direction rather than being re-sampled from
+  // a non-monotonic clock.
+  var particlePhases = new Array(particles.length);
+  for (var pi = 0; pi < particles.length; pi++) {
+    particlePhases[pi] = particles[pi].offset;
+  }
 
   // ══════════════════════════════════════
   // Render loop
   // ══════════════════════════════════════
 
   var startTime = null;
+  var prevTimestamp = null;
 
   function draw(timestamp) {
     if (!startTime) startTime = timestamp;
     var elapsed = (timestamp - startTime) / 1000;
+    var dt = prevTimestamp == null ? 0 : (timestamp - prevTimestamp) / 1000;
+    prevTimestamp = timestamp;
+
+    // Oscillator signal in [-1, 1] — the instantaneous
+    // magnitude + direction of current at this moment.
+    var osc = Math.sin(2 * Math.PI * OSC_HZ * elapsed);
 
     var w = wrapper.clientWidth;
     var h = wrapper.clientHeight;
@@ -232,25 +264,41 @@
     var fit = getFit();
     var scale = fit.scale;
 
+    // Color blend: green at osc = +1 (forward), warm at osc = -1 (reverse)
+    var t01 = (osc + 1) / 2;
+    var colR = Math.round(WARM[0] + (GREEN[0] - WARM[0]) * t01);
+    var colG = Math.round(WARM[1] + (GREEN[1] - WARM[1]) * t01);
+    var colB = Math.round(WARM[2] + (GREEN[2] - WARM[2]) * t01);
+
+    // Fade particles near the zero-crossings (current → 0 mid-swing)
+    var magAlpha = Math.abs(osc) * 0.7 + 0.3;
+
     for (var i = 0; i < particles.length; i++) {
       var p = particles[i];
       var data = pathData[p.path];
-      var t = (elapsed * p.speed + p.offset) % 1;
-      var pos = getPointOnPath(data.pts, data.lengths, t);
 
+      // Advance phase by dt * speed * osc. When osc < 0, phase
+      // decrements and the particle actually travels backward.
+      particlePhases[i] += dt * p.speed * osc;
+      var t = ((particlePhases[i] % 1) + 1) % 1;
+
+      var pos = getPointOnPath(data.pts, data.lengths, t);
       var px = sx(pos.x);
       var py = sy(pos.y);
       var r = p.r * scale * 1.5;
+      var a = p.alpha * magAlpha;
 
+      // Glow halo
       var grad = ctx.createRadialGradient(px, py, 0, px, py, r * 4);
-      grad.addColorStop(0, 'rgba(' + GREEN[0] + ',' + GREEN[1] + ',' + GREEN[2] + ',' + (p.alpha * 0.4) + ')');
-      grad.addColorStop(1, 'rgba(' + GREEN[0] + ',' + GREEN[1] + ',' + GREEN[2] + ',0)');
+      grad.addColorStop(0, 'rgba(' + colR + ',' + colG + ',' + colB + ',' + (a * 0.4) + ')');
+      grad.addColorStop(1, 'rgba(' + colR + ',' + colG + ',' + colB + ',0)');
       ctx.fillStyle = grad;
       ctx.beginPath();
       ctx.arc(px, py, r * 4, 0, Math.PI * 2);
       ctx.fill();
 
-      ctx.fillStyle = 'rgba(' + GREEN[0] + ',' + GREEN[1] + ',' + GREEN[2] + ',' + p.alpha + ')';
+      // Core dot
+      ctx.fillStyle = 'rgba(' + colR + ',' + colG + ',' + colB + ',' + a + ')';
       ctx.beginPath();
       ctx.arc(px, py, r, 0, Math.PI * 2);
       ctx.fill();
@@ -298,7 +346,6 @@
       }
 
       if (attempts >= maxAttempts) {
-        // Gave up trying to reach the SVG — start particles anyway
         startParticles();
         return;
       }
@@ -318,8 +365,10 @@
         }
         if (len === 0 || !isFinite(len)) continue;
 
-        p.style.strokeDasharray = len;
-        p.style.strokeDashoffset = len;
+        // Use setAttribute — has higher specificity than inline style
+        // and can't be overridden by other style properties on the element
+        p.setAttribute('stroke-dasharray', len);
+        p.setAttribute('stroke-dashoffset', len);
         pathsWithLengths.push({ el: p, len: len });
       }
 
@@ -331,8 +380,8 @@
       // Force reflow so the initial invisible state is painted
       obj.getBoundingClientRect();
 
-      var totalDuration = 1800;
-      var staggerWindow = 600;
+      var totalDuration = 2500;
+      var staggerWindow = 1000;
       var perPathDuration = totalDuration - staggerWindow;
       var startTs = null;
 
@@ -347,14 +396,15 @@
           if (localT < 0) localT = 0;
           if (localT > 1) localT = 1;
           var eased = 1 - Math.pow(1 - localT, 3);
-          entry.el.style.strokeDashoffset = entry.len * (1 - eased);
+          entry.el.setAttribute('stroke-dashoffset', entry.len * (1 - eased));
         }
 
         if (elapsed < totalDuration) {
           requestAnimationFrame(step);
         } else {
           for (var j = 0; j < pathsWithLengths.length; j++) {
-            pathsWithLengths[j].el.style.strokeDashoffset = '0';
+            pathsWithLengths[j].el.removeAttribute('stroke-dasharray');
+            pathsWithLengths[j].el.removeAttribute('stroke-dashoffset');
           }
           startParticles();
         }
