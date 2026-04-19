@@ -48,13 +48,15 @@
 
   var paths = {
 
-    // Upper diode loop (both diodes in antiparallel)
+    // Upper diode loop — flows in the direction of each diode's arrow:
+    // right-to-left through the top diode (points left),
+    // then left-to-right through the bottom diode (points right).
     upperLoop: [
-      [502,60], [502,20],
-      [533,20], [589,20], [613,20],
-      [653,20], [653,60], [653,100],
-      [613,100], [589,100], [533,100],
-      [502,100], [502,65]
+      [502,65], [502,100],
+      [533,100], [589,100], [613,100],  // through bottom diode, L → R
+      [653,100], [653,60], [653,20],
+      [613,20], [589,20], [533,20],     // through top diode, R → L
+      [502,20], [502,60]
     ],
 
     // Top resistor (373,60) → through R → (473,60) → wire → junction at (502,60)
@@ -257,7 +259,120 @@
     requestAnimationFrame(draw);
   }
 
-  setTimeout(function () {
+  // ══════════════════════════════════════
+  // SVG DRAW-IN ANIMATION
+  // ══════════════════════════════════════
+  // Polls for the embedded SVG to be available, then
+  // animates each <path> drawing itself in. If the SVG
+  // document isn't reachable (timing, cross-origin, etc.)
+  // we just skip the draw-in and start particles anyway.
+
+  var particlesStarted = false;
+  function startParticles() {
+    if (particlesStarted) return;
+    particlesStarted = true;
     requestAnimationFrame(draw);
-  }, 500);
+  }
+
+  function tryDrawIn() {
+    var obj = document.querySelector('.circuit-svg-embed');
+    if (!obj) { startParticles(); return; }
+
+    var attempts = 0;
+    var maxAttempts = 40; // ~4 seconds of polling
+
+    function poll() {
+      attempts++;
+      var svgDoc = null;
+      try {
+        svgDoc = obj.contentDocument || (obj.getSVGDocument && obj.getSVGDocument());
+      } catch (e) {
+        svgDoc = null;
+      }
+
+      var paths = svgDoc ? svgDoc.querySelectorAll('path') : null;
+
+      if (paths && paths.length > 0) {
+        runAnimation(paths);
+        return;
+      }
+
+      if (attempts >= maxAttempts) {
+        // Gave up trying to reach the SVG — start particles anyway
+        startParticles();
+        return;
+      }
+
+      setTimeout(poll, 100);
+    }
+
+    function runAnimation(paths) {
+      var pathsWithLengths = [];
+      for (var i = 0; i < paths.length; i++) {
+        var p = paths[i];
+        var len;
+        try {
+          len = p.getTotalLength();
+        } catch (e) {
+          continue;
+        }
+        if (len === 0 || !isFinite(len)) continue;
+
+        p.style.strokeDasharray = len;
+        p.style.strokeDashoffset = len;
+        pathsWithLengths.push({ el: p, len: len });
+      }
+
+      if (!pathsWithLengths.length) {
+        startParticles();
+        return;
+      }
+
+      // Force reflow so the initial invisible state is painted
+      obj.getBoundingClientRect();
+
+      var totalDuration = 1800;
+      var staggerWindow = 600;
+      var perPathDuration = totalDuration - staggerWindow;
+      var startTs = null;
+
+      function step(ts) {
+        if (!startTs) startTs = ts;
+        var elapsed = ts - startTs;
+
+        for (var i = 0; i < pathsWithLengths.length; i++) {
+          var entry = pathsWithLengths[i];
+          var pathStart = (i / pathsWithLengths.length) * staggerWindow;
+          var localT = (elapsed - pathStart) / perPathDuration;
+          if (localT < 0) localT = 0;
+          if (localT > 1) localT = 1;
+          var eased = 1 - Math.pow(1 - localT, 3);
+          entry.el.style.strokeDashoffset = entry.len * (1 - eased);
+        }
+
+        if (elapsed < totalDuration) {
+          requestAnimationFrame(step);
+        } else {
+          for (var j = 0; j < pathsWithLengths.length; j++) {
+            pathsWithLengths[j].el.style.strokeDashoffset = '0';
+          }
+          startParticles();
+        }
+      }
+
+      requestAnimationFrame(step);
+    }
+
+    poll();
+  }
+
+  // Absolute safety net — if nothing else works after 5s, start particles
+  setTimeout(startParticles, 5000);
+
+  // Start the sequence
+  if (document.readyState === 'complete') {
+    tryDrawIn();
+  } else {
+    window.addEventListener('load', tryDrawIn);
+  }
 })();
