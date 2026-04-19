@@ -139,53 +139,8 @@
   <div class="projects-grid">
 
     <div class="project-card" onclick="window.location='projects/superhet-radio.html'">
-      <div class="project-preview">
-        <svg viewBox="0 0 400 200" xmlns="http://www.w3.org/2000/svg">
-          <rect width="400" height="200" fill="#0c1520"/>
-          <!-- Superhet block diagram hint -->
-          <g stroke="#3df0c035" stroke-width="1" fill="none">
-            <!-- Antenna -->
-            <line x1="30" y1="60" x2="30" y2="100"/>
-            <line x1="20" y1="60" x2="40" y2="60"/>
-            <line x1="25" y1="55" x2="35" y2="55"/>
-            <!-- Antenna to mixer -->
-            <path d="M30,100 H70"/>
-            <!-- RF amp -->
-            <rect x="70" y="85" width="40" height="30" rx="2"/>
-            <text x="90" y="104" text-anchor="middle" fill="#3df0c050" font-size="6" font-family="monospace">RF</text>
-            <!-- To mixer -->
-            <path d="M110,100 H150"/>
-            <!-- Mixer (circle with X) -->
-            <circle cx="165" cy="100" r="15"/>
-            <line x1="155" y1="90" x2="175" y2="110"/>
-            <line x1="175" y1="90" x2="155" y2="110"/>
-            <!-- LO input -->
-            <path d="M165,130 V115"/>
-            <rect x="148" y="130" width="34" height="20" rx="2"/>
-            <text x="165" y="144" text-anchor="middle" fill="#f0a03d40" font-size="6" font-family="monospace">LO</text>
-            <!-- IF stage -->
-            <path d="M180,100 H220"/>
-            <rect x="220" y="85" width="40" height="30" rx="2"/>
-            <text x="240" y="104" text-anchor="middle" fill="#3df0c050" font-size="6" font-family="monospace">IF</text>
-            <!-- Detector -->
-            <path d="M260,100 H290"/>
-            <rect x="290" y="85" width="40" height="30" rx="2"/>
-            <text x="310" y="104" text-anchor="middle" fill="#3df0c050" font-size="6" font-family="monospace">DET</text>
-            <!-- Audio out -->
-            <path d="M330,100 H360"/>
-            <!-- Speaker symbol -->
-            <rect x="360" y="92" width="10" height="16" rx="1"/>
-            <path d="M370,88 L385,78 V122 L370,108"/>
-          </g>
-          <!-- Signal wave hints -->
-          <g stroke="#f0a03d25" stroke-width="0.8" fill="none">
-            <path d="M45,100 Q50,92 55,100 T65,100"/>
-            <path d="M125,100 Q130,92 135,100 T145,100"/>
-          </g>
-          <g stroke="#3d8ef020" stroke-width="0.8" fill="none">
-            <path d="M345,100 Q348,94 351,100 T357,100"/>
-          </g>
-        </svg>
+      <div class="project-preview has-image">
+        <img src="assets/radio-front.jpeg" alt="Superheterodyne AM/FM Radio">
         <span class="project-number">01</span>
         <span class="project-type-badge hw">Hardware</span>
       </div>
