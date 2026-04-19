@@ -70,115 +70,9 @@
   </div>
 
 
-  <!-- DC Amplifier schematic decoration -->
+  <!-- Oscillator circuit (hand-drawn in draw.io, embedded SVG) -->
   <div class="circuit-deco">
-    <canvas id="circuitCanvas"></canvas>
-    <svg id="circuitSVG" viewBox="0 0 420 420" fill="none" xmlns="http://www.w3.org/2000/svg">
-
-      <!-- WIRES -->
-      <g stroke="#3df0c0" stroke-width="1.2" opacity="0.4" fill="none">
-        <!-- Vcc rail across top -->
-        <path class="trace" d="M170,30 H250" stroke-dasharray="120" stroke-dashoffset="120"/>
-        <!-- Vcc down to RL -->
-        <path class="trace" d="M250,30 V55" stroke-dasharray="80" stroke-dashoffset="80"/>
-        <!-- RL to collector -->
-        <path class="trace" d="M250,100 V155" stroke-dasharray="100" stroke-dashoffset="100"/>
-        <!-- Collector to Vout -->
-        <path class="trace" d="M250,155 H350" stroke-dasharray="150" stroke-dashoffset="150"/>
-        <!-- Vcc down to R1 -->
-        <path class="trace" d="M170,30 V68" stroke-dasharray="80" stroke-dashoffset="80"/>
-        <!-- R1 to bias junction -->
-        <path class="trace" d="M170,118 V200" stroke-dasharray="120" stroke-dashoffset="120"/>
-        <!-- Bias junction to Vin (direct DC, no cap) -->
-        <path class="trace" d="M170,200 H60" stroke-dasharray="150" stroke-dashoffset="150"/>
-        <!-- Bias junction to transistor base -->
-        <path class="trace" d="M170,200 H207" stroke-dasharray="60" stroke-dashoffset="60"/>
-        <!-- Bias junction down to R2 -->
-        <path class="trace" d="M170,200 V248" stroke-dasharray="80" stroke-dashoffset="80"/>
-        <!-- R2 to ground -->
-        <path class="trace" d="M170,298 V355" stroke-dasharray="80" stroke-dashoffset="80"/>
-        <!-- Emitter down -->
-        <path class="trace" d="M250,235 V280" stroke-dasharray="80" stroke-dashoffset="80"/>
-        <!-- RE to ground -->
-        <path class="trace" d="M250,330 V355" stroke-dasharray="60" stroke-dashoffset="60"/>
-        <!-- Vin source to ground -->
-        <path class="trace" d="M40,212 V355" stroke-dasharray="180" stroke-dashoffset="180"/>
-      </g>
-
-      <!-- Vcc node (source of all current) -->
-      <circle cx="210" cy="30" r="5" fill="#3df0c0" opacity="0.6"/>
-      <circle cx="210" cy="30" r="10" fill="none" stroke="#3df0c0" stroke-width="0.5" opacity="0.25"/>
-
-      <!-- RL (collector load) -->
-      <g stroke="#f0a03d" stroke-width="1.4" opacity="0.5" fill="none">
-        <polyline points="250,55 242,61 258,70 242,79 258,88 242,97 250,100"/>
-      </g>
-
-      <!-- R1 (upper bias) -->
-      <g stroke="#f0a03d" stroke-width="1.4" opacity="0.45" fill="none">
-        <polyline points="170,68 162,74 178,83 162,92 178,101 162,110 170,118"/>
-      </g>
-
-      <!-- R2 (lower bias) -->
-      <g stroke="#f0a03d" stroke-width="1.4" opacity="0.45" fill="none">
-        <polyline points="170,248 162,254 178,263 162,272 178,281 162,290 170,298"/>
-      </g>
-
-      <!-- RE (emitter resistor) -->
-      <g stroke="#f0a03d" stroke-width="1.4" opacity="0.45" fill="none">
-        <polyline points="250,280 242,286 258,295 242,304 258,313 242,322 250,330"/>
-      </g>
-
-      <!-- Transistor (NPN BJT) -->
-      <g opacity="0.6">
-        <circle cx="232" cy="196" r="32" stroke="#3df0c0" stroke-width="1.5" fill="#3df0c008"/>
-        <line x1="207" y1="196" x2="220" y2="196" stroke="#3df0c0" stroke-width="1.5"/>
-        <line x1="220" y1="176" x2="220" y2="216" stroke="#3df0c0" stroke-width="2.5"/>
-        <line x1="220" y1="183" x2="250" y2="155" stroke="#3df0c0" stroke-width="1.5"/>
-        <line x1="220" y1="209" x2="250" y2="235" stroke="#3df0c0" stroke-width="1.5"/>
-        <path d="M246,232 L250,235 L243,233" stroke="#3df0c0" stroke-width="1.5" fill="#3df0c0" opacity="0.7"/>
-      </g>
-
-      <!-- Vin DC source (battery symbol) -->
-      <g opacity="0.4">
-        <!-- Positive plate (long) -->
-        <line x1="60" y1="188" x2="60" y2="212" stroke="#f0a03d" stroke-width="2"/>
-        <!-- Negative plate (short) -->
-        <line x1="40" y1="192" x2="40" y2="208" stroke="#f0a03d" stroke-width="1.2"/>
-        <!-- Connecting bar top -->
-        <line x1="40" y1="200" x2="60" y2="200" stroke="#f0a03d" stroke-width="1.2" opacity="0.3"/>
-        <!-- + label -->
-        <text x="64" y="186" fill="#f0a03d" font-size="9" font-family="monospace" opacity="0.5">+</text>
-      </g>
-
-      <!-- Vout node -->
-      <circle cx="350" cy="155" r="4.5" fill="#3df0c0" opacity="0.55"/>
-      <circle cx="350" cy="155" r="8" fill="none" stroke="#3df0c0" stroke-width="0.5" opacity="0.2"/>
-
-      <!-- Ground symbols -->
-      <g stroke="#3df0c0" stroke-width="1.2" opacity="0.3">
-        <!-- Under Vin -->
-        <line x1="28" y1="355" x2="52" y2="355"/>
-        <line x1="32" y1="360" x2="48" y2="360"/>
-        <line x1="36" y1="365" x2="44" y2="365"/>
-        <!-- Under R2 -->
-        <line x1="158" y1="355" x2="182" y2="355"/>
-        <line x1="162" y1="360" x2="178" y2="360"/>
-        <line x1="166" y1="365" x2="174" y2="365"/>
-        <!-- Under RE -->
-        <line x1="238" y1="355" x2="262" y2="355"/>
-        <line x1="242" y1="360" x2="258" y2="360"/>
-        <line x1="246" y1="365" x2="254" y2="365"/>
-      </g>
-
-      <!-- Junction dots -->
-      <g fill="#3df0c0" opacity="0.5">
-        <circle cx="170" cy="30" r="3"/>
-        <circle cx="250" cy="30" r="3"/>
-        <circle cx="170" cy="200" r="3.5"/>
-        <circle cx="250" cy="155" r="3.5"/>
-      </g>
-    </svg>
+    <object type="image/svg+xml" data="assets/oscillator-circuit.svg" class="circuit-svg-embed"></object>
   </div>
 </div>
 
@@ -629,6 +523,5 @@
 
 <script src="js/main.js"></script>
 <script src="js/badge.js"></script>
-<script src="js/circuit.js"></script>
 </body>
 </html>
